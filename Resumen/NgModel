@@ -1,0 +1,150 @@
+NgModel
+
+
+npm Package: 	@angular/forms
+	Module: 	import { NgModel } from '@angular/forms';
+	Source:		forms/src/directives/ng_model.ts
+
+
+Crea una instancia FormControl desde un modelo de dominio y lo vincula a un elemento de control de formulario.
+
+La instancia FormControl rastreará(will track) el valor, la interacción del usuario y el status de validación del control y mantendrá la vista sincronizada con el modelo. Si se utiliza en un formulario padre, la directiva también se registrará con el formulario como un control hijo.
+
+
+ @Directive({
+  selector: '[ngModel]:not([formControlName]):not([formControl])',
+  providers: [formControlBinding],
+  exportAs: 'ngModel'
+})
+class NgModel extends NgControl implements OnChanges, OnDestroy {
+  viewModel: any
+  name: string
+  isDisabled: boolean
+  model: any
+  options: {name?: string, standalone?: boolean}
+  update: new EventEmitter()
+  ngOnChanges(changes: SimpleChanges)
+  ngOnDestroy(): void
+  get control(): FormControl
+  get path(): string[]
+  get formDirective(): any
+  get validator(): ValidatorFn|null
+  get asyncValidator(): AsyncValidatorFn|null
+  viewToModelUpdate(newValue: any): void
+}
+Como Usarlo
+
+
+
+
+Esta directiva puede ser utilizada por sí misma o como parte de form más grande. Todo lo que necesita es el selector ngModel para activarlo.
+
+Acepta un modelo de dominio de manera opcional. Si tiene una vinculación unidireccional(one-way binding) para ngModel con la sintaxis [], cambiar el valor del modelo de dominio en la clase de component establecerá el valor en la view. Si tiene una vinculación bidireccional(two-way binding) con la sintaxis [()] (también conocida como "sintaxis banana-box"), el valor de la interfaz de usuario(UI) siempre se sincronizará de nuevo con el modelo de dominio de su clase.
+
+Si desea inspeccionar las propiedades del FormControl asociado (como el estado de validez "validity state"), también puede exportar la directiva a una variable de plantilla local utilizando ngModel como key  (ex: #myVar="ngModel"). A continuación, puede acceder al control utilizando la propiedad de control de la directiva , pero la mayoría de las propiedades que necesitará (como valid y dirty ) caerán al control de todos modos, para poder acceder a ellas directamente. Puede ver una lista completa de propiedades directamente disponibles en AbstractControlDirective
+
+A continuación se muestra un ejemplo de un control standard simple que utiliza ngModel:
+
+import {Component} from '@angular/core';
+@Component({
+  selector: 'example-app',
+  template: `
+    <input [(ngModel)]="name" #ctrl="ngModel" required>
+ 
+    <p>Value: {{ name }}</p>
+    <p>Valid: {{ ctrl.valid }}</p>
+    
+    <button (click)="setValue()">Set value</button>
+  `,
+})
+
+export class SimpleNgModelComp {
+  name: string = '';
+  setValue() { this.name = 'Nancy'; }
+}
+
+
+
+Cuando utilice las etiquetas ngModel dentro de <form>, también necesitará proporcionar un atributo name para que el control pueda registrarse con el formulario padre bajo ese nombre.
+
+Vale la pena señalar que en el contexto de un formulario padre, a menudo puede saltar enlace unidireccional o bidireccional(one-way or two-way binding ) porque el formulario padre sincronizará el valor para usted. Puede acceder a sus propiedades exportándolas a una variable de plantilla local utilizando ngForm (ex: #f="ngForm"). Entonces usted puede pasarlo donde necesita ir en submit.
+
+Si necesita rellenar los valores iniciales en su formulario, usar una vinculación unidireccional(one-way) para ngModel tiende a ser suficiente siempre y cuando utilice el valor del formulario exportado en lugar del valor del modelo de dominio en el submit.
+
+Eche un vistazo a un ejemplo de uso de ngModel dentro de un formulario:
+
+
+ 
+import {Component} from '@angular/core';
+import {NgForm} from '@angular/forms';
+ 
+@Component({
+  selector: 'example-app',
+  template: `
+    <form #f="ngForm" (ngSubmit)="onSubmit(f)" novalidate>
+      <input name="first" ngModel required #first="ngModel">
+      <input name="last" ngModel>
+      <button>Submit</button>
+    </form>
+    
+    <p>First name value: {{ first.value }}</p>
+    <p>First name valid: {{ first.valid }}</p>
+    <p>Form value: {{ f.value | json }}</p>
+    <p>Form valid: {{ f.valid }}</p>
+  `,
+})
+export class SimpleFormComp {
+  onSubmit(f: NgForm) {
+    console.log(f.value);  // { first: '', last: '' }
+    console.log(f.valid);  // false
+  }
+}
+
+
+
+Para ver ejemplos ngModel con diferentes tipos de control de formulario, consulte:
+	-Radio buttons: RadioControlValueAccessor
+	- Selects: SelectControlValueAccessor
+npm package: @angular/forms
+NgModule: FormsModule
+
+Selectors
+	[ngModel]:not([formControlName]):not([formControl])
+
+Inputs
+	name bound to NgModel.name
+	disabled bound to NgModel.isDisabled
+	ngModel bound to NgModel.model
+	ngModelOptions bound to NgModel.options
+
+Outputs
+	ngModelChange bound to NgModel.update
+
+Exported as
+	ngModel
+
+Constructor
+	 constructor(parent: ControlContainer, validators: Array<Validator|ValidatorFn>, asyncValidators: Array<AsyncValidator|AsyncValidatorFn>, valueAccessors: ControlValueAccessor[])
+
+Members
+	 viewModel: any
+	 name: string
+	 isDisabled: boolean
+	 model: any
+	 options: {name?: string, standalone?: boolean}
+	 update: new EventEmitter()
+	 ngOnChanges(changes: SimpleChanges)
+	 ngOnDestroy(): void
+	 get control(): FormControl
+	 get path(): string[]
+	 get formDirective(): any
+	 get validator(): ValidatorFn|null
+	 get asyncValidator(): AsyncValidatorFn|null
+	 viewToModelUpdate(newValue: any): void
+
+Annotations
+	 @Directive({
+	  selector: '[ngModel]:not([formControlName]):not([formControl])',
+	  providers: [formControlBinding],
+	  exportAs: 'ngModel'
+	})

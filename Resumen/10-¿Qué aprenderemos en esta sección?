@@ -1,0 +1,45 @@
+¿Qué aprenderemos en esta sección?
+Sección 10, clase 144
+	A continuación vamos a aprender sobre los siguientes temas:
+
+Diferentes aproximaciones que tiene angular para trabajar formularios.
+	Profundizaremos en el uso del ngModel.
+	Utilizar las validaciones pre fabricadas.
+	Crear validaciones personalizadas.
+	Crear validaciones asíncronas.
+	Realizar un submit utilizando el ngSubmit.
+	Postear información únicamente cuando el formulario es valido,
+	Crear formularios del lado del componente.
+	Cargar información por defecto a los formularios.
+	Subscribirnos a los cambios de los valores de los formularios.
+	Entre otras cosas bien interesantes.
+	Durante la sección, tendremos tareas y un examen teórico al final.
+
+	
+148-149 teoria Escrita en word
+
+143-145:
+
+   Tipos de aproximaciones que tiene angular, para usar formularios
+
+   1- Usando el template. Que se refiere a crear todo el SET de validaciones, que se escribe del lado del HTML
+      Al hacer submit, podemos obtener el 
+      		- Objeto completo de valores
+      		- Objeto completo del formulario (NgForm)
+
+   2- Usando data. Tiene validaciones más robustas
+       validaciones: Asincronas, normales, con patrones, y todo lo que es la aproximacion por el lado de la "DATA"
+
+
+
+146-147:  
+    Poniendo el html
+
+    crear 2 componentes:
+       1- Aproximación por template (se enfoca mas en el html, y por tanto el codigo esta más sucio, porq las validaciones y todo esta aqui mediante directivas)
+           ng g c components/template
+
+       2- Aproximación por data  (se enfoca mas el modelo del componente, por tanto el html esta más limpio)
+        	ng g c components/data
+
+
