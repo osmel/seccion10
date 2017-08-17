@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import {NgForm} from '@angular/forms'   
+
 @Component({
   selector: 'app-template',
   
@@ -9,16 +11,51 @@ import { Component, OnInit } from '@angular/core';
   												   //es decir escribiendo solo en la vista, pero sin modificar el modelo	
 
   templateUrl: './template.component.html',   // [(ngModel)]: Es vidireccional, tanto cambia en el modelo como en la vista
-  
-  styleUrls: ['./template.component.css']
+
+   //styleUrls: ['./template.component.css']
+   styles: [
+   ` 
+   	.ng-invalid.ng-touched:not(form) {
+   		border:1px solid red;
+   	} 
+   `
+   ]
 })
 export class TemplateComponent implements OnInit {
 
    usuario:Object = {
-   		nombre:"osmel",
-   		apellido:"calderon",
-   		correo: "osmel.calderon@gmail.com"
+   		nombre:null, //"osmel",
+   		apellido:null, //"calderon",
+   		correo: null, // "osmel.calderon@gmail.com"
+   		pais:"", //"Cu"
+   		sexo:"Hombre", //"Cu"
+   		asignatura: "M",
+   		acepta: false
    }	
+
+   paises= [{
+   	 codigo:"Cri",
+   	 nombre: "Costa Rica"
+    },
+    {
+   	 codigo:"Cu",
+   	 nombre: "Cuba"
+    }
+   ]
+
+   sexos=["Hombre", "Mujer"]
+
+   asignaturas= [{
+   	 id:"M",
+   	 nombre: "Matematica"
+    },
+    {
+   	 id:"C",
+   	 nombre: "Computación"
+    }
+   ]
+
+
 
   constructor() { }
 
@@ -27,7 +64,7 @@ export class TemplateComponent implements OnInit {
 
 
   
-  Guardar(formulario: any){  //en este caso el posteo fue sin enviar parametros, por tanto no llegan valores
+  Guardar(formulario: NgForm){  //en este caso el posteo fue sin enviar parametros, por tanto no llegan valores
   	  console.log('hola se esta haciendo posteo');
   	  console.log(formulario);
   	  console.log("valor de la vista", formulario.value);

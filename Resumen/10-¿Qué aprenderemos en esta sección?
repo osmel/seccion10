@@ -16,7 +16,7 @@ Diferentes aproximaciones que tiene angular para trabajar formularios.
 	Durante la sección, tendremos tareas y un examen teórico al final.
 
 	
-148-149 teoria Escrita en word
+
 
 143-145:
 
@@ -32,7 +32,7 @@ Diferentes aproximaciones que tiene angular para trabajar formularios.
 
 
 
-146-147:  
+146-147, 148-149 teoria Escrita en word
     Poniendo el html
 
     crear 2 componentes:
@@ -42,4 +42,100 @@ Diferentes aproximaciones que tiene angular para trabajar formularios.
        2- Aproximación por data  (se enfoca mas el modelo del componente, por tanto el html esta más limpio)
         	ng g c components/data
 
+
+150- Validaciones
+
+	declararlo en el .ts, para poder trabajar con formularios	
+		import {NgForm} from '@angular/forms'   
+
+   required -> obligatorio
+   pattern="[a-z0-9._%+-]+@[a-z0-9._%+-]+\.[a-z]{2,3}$"   -->expresiones regulares
+
+
+   		** ¿como sabemos que error presenta un campo?
+			   	 propiedad: 
+			   	 	NgForm-> Controls->  _status : (VALID, INVALID)
+							   	 		  VALID: TRUE
+							   	 		INVALID: FALSE
+							   	 		errors:Object (que indica en que esta fallando el objeto) .
+							   	 				Cdo la respuesta es null esta todo OK
+   	 
+   	 	** para poner msg a los errores, podemos usar el .css y evaluar las clases que nos da por defecto Angular
+
+   	 	     styles: [
+				   ` 
+				   	.ng-invalid {
+				   		border:1px solid red;
+				   	} 
+				   `
+			 ]		
+
+			 //.ng-invalid.ng-touched  --> indica que es invalido y que paso ya por el campo
+			 //.ng-invalid.ng-touched:not(form)  --> :not(form) Para que se aplique el estilo a todos los elementos menos al formulario
+
+
+
+			 <!-- quiero que haga referencia al objeto Controls que esta creando angular por mi en el modelo-->
+				 	#Nombre="ngModel"  
+
+			 	esto esta accediendo a 	NgForm-> Controls-> errors
+				 	<div *ngIf="Nombre.errors?.required">    
+		             	 Este campo es requerido
+		             </div>    
+
+		            ?: es porque tengo q ver si existe o no el campo required 	
+
+
+	          <input class="form-control"
+	                 type="text"
+	                 placeholder="Nombre"
+	                 name="Nombre"
+	                 [(ngModel)] = "usuario.nombre"
+	                 minlength="5"
+					 required
+					 #Nombre="ngModel"  
+	                 >
+	             <div *ngIf="Nombre.errors?.required">
+	             	 Este campo es requerido
+	             </div>    
+
+	             <div *ngIf="Nombre.errors?.minlength">
+	             	 Por lo menos {{Nombre.errors.minlength.requiredLength}} caracteres
+	             </div>   
+
+
+
+
+153 validacion con bootstrap
+		https://v4-alpha.getbootstrap.com/components/forms/#validation
+
+		Agregue ".has-warning, .has-danger, o .has-success" al elemento padre. Cualquier elemento de form .col-form-label, .form-control, o personalizado  recibirán los estilos de validación.
+
+		".form-control-feedback": 
+		El "texto de validación contextual", además de su "texto de ayuda del campo de formulario habitual, se puede agregar con el uso de ".form-control-feedback". Este texto se adaptará a la clase padre .has-*. Por defecto sólo incluye un poco de margen para el espaciado y un color modificado para cada estado.
+
+		Los iconos de validación son url()s configuradas a través de variables Sass que se aplican a las declaraciones de imagen de fondo(background-image) para cada estado.
+		Puede usar sus propios PNGs base64 o SVG actualizando las variables Sass y recompilando.
+		Los iconos también se pueden deshabilitar completamente estableciendo las variables en "none" o comentando el Sass de origen.
+
+
+
+		<div class="form-group row has-danger">
+		<div class="form-group row" [ngClass]="{'has-danger': nombre.errors?.required || nombre.errors?.minlength }" >
+
+
+
+
+		 <div *ngIf="Nombre.errors?.required" class="form-control-feedback">
+		             	 Este campo es requerido
+		             </div>    
+
+		             <div *ngIf="Nombre.errors?.minlength" class="form-control-feedback">
+		             	 Por lo menos {{Nombre.errors.minlength.requiredLength}} caracteres
+		             </div>    
+
+
+154- Select, radio y checkBox
+	
+	https://v4-alpha.getbootstrap.com/components/forms/#radios
 
