@@ -249,17 +249,26 @@ pending:true: Significa que hay una validacion pendiente, mientras se esta ejecu
 
 
 
-162- 
+162-163 
   Validaciones personalizadas
-    
+  	(163) uso de bind para enviar this a otro contexto, en el caso de igualdad de contraseñas
+
+164- 
+  Validaciones asincronicas
+
+  Los validadores async son utiles cdo la data no esta en ese preciso momento que la necesitamos.
+  Autenticacion de usuario. 
+  	Cdo la persona esta usando un id, y necesitamos ir a la bd a verificar si ese ID esta disponible, 
+  	 en ese caso la validacion entra en un proceso de espera hasta q el servidor o nuestro servicio, retorne si esta disponible o no
+  	 es decir si la validacion pasa o no
 
 
 
 
+165- Escuchar los cambios que sucede en cualquier campo(tanto "valores" como "estados") 
+   
 
-
-
-
+      Ejemplo: Cdo cambia algo dentro de nuestro formulario y disparar una función
 
 
 
@@ -290,7 +299,7 @@ http://academia-binaria.com/formularios-de-datos-en-angular2/
 http://victorroblesweb.es/2016/08/02/crear-validar-formularios-angular-2/
 https://andresbaredes.wordpress.com/2016/09/26/formulario-de-login-ionic-2-y-angular-2/
 
-		      
+
 
 
 
