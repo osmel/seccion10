@@ -139,3 +139,158 @@ Diferentes aproximaciones que tiene angular para trabajar formularios.
 	
 	https://v4-alpha.getbootstrap.com/components/forms/#radios
 
+
+
+
+
+
+//////////////////////////APROXIMACION POR DATA///////////////////////////////////
+156
+  Para trabajar con Aproximaxion de Data, necesitamos importar estas basicas en el modulo del data:
+     
+     	https://www.npmjs.com/package/ng-validators
+     import { FormGroup, FormControl,  Validators } from '@angular/forms';
+
+ En app.modules.ts
+    import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    
+  ],    
+
+  crear un elemento que será el responsable del manejo de mi forma completamente
+    forma:FormGroup;
+    	this.forma = new FormGroup({
+  			nombre: new FormControl('osmel', reglaDeValidacion, reglaDeValidacionAsyncronas)
+			//Como hacer las reglas de validacion en el (.ts) 
+			correo: new FormControl('', 
+  									  [  Validators.required, 
+  										Validators.pattern("[a-z0-9._%+-]+@[a-z0-9._%+-]+\.[a-z]{2,3}$")
+  									  ]
+  									)
+
+  		});
+
+
+.html
+   <form [formGroup]="forma" (ngSubmit)="guardarCambios()" >
+
+
+pending:true: Significa que hay una validacion pendiente, mientras se esta ejecutando una validacion asyncrona  		
+157-
+  Como enlazar los input(html) a las propiedades de tipo formGroup(.ts)
+   formControlName="nombre" --> esto es lo que enlaza con la propiedad del .ts
+
+ 158- Validaciones y msg de validaciones en html
+
+      <div class="form-group row" [ngClass]="{'has-danger': (!forma.get('nombre').valid) }" >  
+
+159 -  
+   Agrupacion de los objetos formGroupName
+
+160- 
+  Data: 
+  	Carga de la data al formulario apartir de un objeto
+			  	this.forma = new FormGroup({
+		  			 nombrecompleto : new FormGroup({
+		  			 	nombre: new FormControl('', [Validators.required, Validators.minLength(3)]),
+		  				apellido: new FormControl('', [Validators.required])
+		  			 }),
+		  			correo: new FormControl('', 
+		  									  [  Validators.required, 
+		  										Validators.pattern("[a-z0-9._%+-]+@[a-z0-9._%+-]+\.[a-z]{2,3}$")
+		  									  ]
+		  									)
+		  										
+		  		});
+		  		this.forma.setValue(this.usuario); //esto me ahora tener que inicializar cada valor
+
+  	reset(para que tenga valor pristine por defecto) y  
+
+161- 
+     Como podemos decirle a la forma q ahora va a tener un array de elementos, para controlar los elementos  	
+
+
+	 	this.forma = new FormGroup({
+	        pasatiempos: new FormArray([
+	            new FormControl("correr", Validators.required),
+	            new FormControl("dormir", Validators.required),
+	            new FormControl("comer", Validators.required)
+	        ])
+  		});
+
+
+		  <div class="col-md-8" formArrayName="pasatiempos" >//le indica q va a usar el "array pasatiempos"
+
+		        <input 
+		               formControlName="0"     //hace referencia al "item 0" de pasatiempos
+		               class="form-control"
+		               type="text"
+		               placeholder="Pasatiempos"
+		               >
+		        <input 
+		               formControlName="1"
+		               class="form-control"
+		               type="text"
+		               placeholder="Pasatiempos"
+		               >
+
+		        <input 
+		               formControlName="2"
+		               class="form-control"
+		               type="text"
+		               placeholder="Pasatiempos"
+		               >
+		      </div>	               
+
+
+
+
+
+
+162- 
+  Validaciones personalizadas
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+https://www.uno-de-piera.com/angular-2-y-codeigniter-3/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+http://blog.enriqueoriol.com/2016/08/formularios-en-angular-2.html
+https://www.uno-de-piera.com/formularios-con-angular-2/
+http://academia-binaria.com/formularios-de-datos-en-angular2/
+http://victorroblesweb.es/2016/08/02/crear-validar-formularios-angular-2/
+https://andresbaredes.wordpress.com/2016/09/26/formulario-de-login-ionic-2-y-angular-2/
+
+		      
+
+
+

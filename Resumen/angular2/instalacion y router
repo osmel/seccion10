@@ -1,0 +1,431 @@
+http://blog.enriqueoriol.com/2016/06/vscode-angular-2.html
+https://medium.com/@jc.valerio.b/angular-2-historia-caracter%C3%ADsticas-y-m%C3%A9todos-de-instalaci%C3%B3n-11492ea67e2b
+http://academia-binaria.com/enrutado-con-angular2-el-nuevo-spa/
+http://academia-binaria.com/
+
+http://victorroblesweb.es/2016/07/02/rutas-angular-2-nuevo-router/
+https://pixelmouse.es/enrutamiento-en-angular-2/
+http://blogs.encamina.com/desarrollandosobresharepoint/2016/01/26/angular-2-conceptos-core/
+
+
+
+Importante un resumen
+http://codigoxules.org/creando-el-primer-proyecto-en-angular-2-manual-vs-angular-cli/
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////COMPONENTE/////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+///////////////////////////crear componentes////////////////////////////////
+1- crear los componentes
+	import { Component } from '@angular/core';
+	@Component({
+	 selector: 'fruteria ',
+	 template: ` esta es la fruta `,
+	})
+	export class FruteriaComponent {
+	}
+
+
+2- IMPORTACIÓN Y DECLARACIÓN DE COMPONENTES "app.module.ts"
+	   Importar componentes en el módulo del proyecto para que este tenga constancia de su existencia.
+			  import { FruteriaComponent } from './fruteria.component';
+	   Declararlos "apartado *declarations"
+	      declarations: [ AppComponent, FruteriaComponent ],
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////RUTA//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+//////////////////////////CREAR UN FICHERO PARA MANEJAR RUTAS/////////////////////////////////////////////
+3-  ENRUTAMIENTO (ROUTING)	. archivo de rutas
+		Creamos archivo "src/app/app.routes.ts", que se encargará de redirigir las direcciones que introducimos en el navegador. 
+
+		con snniper saco la sintaxis basicas de routers escribiendo
+		"ng2rou" y enter
+
+			//import {ModuleWithProviders} from '@angular/core';
+
+			import { RouterModule, Routes } from '@angular/router';
+
+			//los componentes que vamos a enrutar
+			import { HomeComponent } from './components/home/home.component';
+			import { AboutComponent } from './components/about/about.component';
+			import { HeroesComponent } from './components/heroes/heroes.component';
+			import { HeroeComponent } from './components/heroe/heroe.component';
+
+
+			//Que rutas vamos a usar para cada componente
+			const APP_ROUTES: Routes = [
+			    //path:'',  //porq es la base por eso esta en blanco '' .  ruta base: *http://<mi-sitio-web>/*
+			  { path: 'home', component: HomeComponent },
+			  { path: 'about', component: AboutComponent },
+			  { path: 'heroes', component: HeroesComponent },
+			  {path:'heroe/:id',component:HeroeComponent },
+
+			  //esta es la ruta por defecto, que tomara sino coincide ninguna
+			  { path: '**', pathMatch: 'full', redirectTo: 'Home' }
+			];
+
+			//si usas este sin hash, asegurarse de que en index.html aparezca esto   <base href="/">
+			export const APP_ROUTING = RouterModule.forRoot(APP_ROUTES);
+			//useHash:true ->para el uso de parametros
+			//export const APP_ROUTING = RouterModule.forRoot(APP_ROUTES,{useHash:true});
+
+
+ 	  
+
+
+4- Le decimos a angular que disponga de esas rutas "app.module.ts"
+
+		//rutas  "APP_ROUTING" es el nombre que exporta el fichero './app.routes'
+		import { APP_ROUTING } from './app.routes';
+
+		imports: [
+			APP_ROUTING,
+			...
+		]	
+
+
+
+	  
+//////////////////////////NAVEGAR POR LAS RUTAS/////////////////////////////////////////////	  
+
+5- Abrimos *app.component.ts*	
+
+		import { Component } from '@angular/core';
+		 
+		@Component({
+		 selector: 'app-root',
+		 templateURL: `app.component.ts`,
+		})
+		export class AppComponent {
+		}
+
+
+6- NAVEGACION  *app.component.html*
+
+  - Introducir etiquetas para navegar 
+  	  <li class="nav-item" routerLinkActive="active" >
+        	<a class="nav-link" [routerLink]="['home']" >Home</a>
+      </li>
+
+
+  - y la directiva <router-outlet> que entiende que se esta hablando de router.	<router-outlet></router-outlet>: que es una directiva proporcionada por "RouterModule".
+
+	<div class="container main-container">
+	  <router-outlet></router-outlet>
+	</div>
+
+
+
+	routerLinkActive ="nombreClase que necesitamos cdo esta activo": Para que deje activo el elemento
+		en este caso la clase que necesitamos es "active"
+	nota: angular al encontrar un [routerLink] va a fijarse en el elemento padre superior si tiene un routerLinkActive,
+     y en caso de que lo tenga podra las clases que este tiene cdo se active el elemento	
+
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+
+Rutas con parametros (Moviendonos con parametros)
+
+/////////////////////////////////////////////////////
+	//router definir en "app.routes.ts" que espera un parametro
+			import { HeroeComponent } from './components/heroe/heroe.component';
+			{path:'heroe/:id',component:HeroeComponent },
+
+
+////////////////////////el componente que va a ser de DETALLES /////////////////////////////
+	//1- crear un componente q nos sirva para mostrar los detalles de cada heroe
+		 ng g c componets/heroe		
+
+
+//////////////////////<a> con parametro///////////////////////////////
+	//2- Navegar 
+
+		- con <a> pasando parametro
+		   <a class="nav-link" [routerLink]="['/heroe',i]">Heroes</a>
+
+//////////////////////////<button> con parametro///////////////////////////
+		- con un button y redireccionar con parametros
+
+			  heroes.component.html
+			      <button (click)="verHeroe(i)"
+			        type="button" class="btn btn-outline-primary btn-block">
+			        ver más..
+			      </button>
+
+
+		  // Crear la función en el "heroes.component.ts" y usar this.ruta.navigate(['/heroe',idx]);
+		  //la ruta la defino por Router
+
+				  import { Router } from '@angular/router';
+				  constructor(private ruta:Router
+				                ) {
+				  }
+
+				  verHeroe(idx:number){
+				    //console.log(idx);
+				    this.ruta.navigate(['/heroe',idx]);
+				  }
+//////////////////////////////////////////////////////////////////////////////////
+////////////////////////Recibiendo parametros desde URL/////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+
+
+	 - primero importamos el paquete "ActivatedRoute"
+		     import { ActivatedRoute } from '@angular/router';
+
+	 - luego lo recibimos en el constructor  
+	   	constructor(private rutaActiva: ActivatedRoute
+	  	) {
+	      /*
+	      necesitamos escuchar los cambios o lo que venga de estos parametros. Esto regresa un observador,
+	      es algo como una promesa, algo q esta pendiente de esos cambios. Para que esto funciones nosotros
+	      necesitamos suscribirnos a ese observador
+	      */
+	      this.rutaActiva.params.subscribe(parametro => {
+	        	console.log(parametro); //esto va a regresar un objeto con todos los parametros en este caso id:0
+	        							//tener presente que los parametros q regresan son los q declaramos en el router y
+	        							// con los mismos nombres que usamos en el router
+	        	//puedo verlo así console.log(parametro.id); pero la forma adecuada es:
+	        	console.log(parametro['id']); //es mas seguro
+	      })
+	  }
+
+
+
+//////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////RESUMEN/////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+
+
+"src/app/app.routes.ts" -->archivo router
+	//import {ModuleWithProviders} from '@angular/core';
+	import { RouterModule, Routes } from '@angular/router';
+
+////////////////////////
+
+"componente.component.ts" -> para usar          ==> this.ruta.navigate(['/heroe',idx]);
+	import { Router } from '@angular/router';
+    **para forzar una navegacion(como el "href" de java)
+////////////////////////
+
+"componente.component.ts" -> para recibir parametros desde una URL ==> this.rutaActiva.params.subscribe
+	import { ActivatedRoute } from '@angular/router';
+	constructor(private rutaActiva: ActivatedRoute
+  	) {
+      /*
+      necesitamos escuchar los cambios o lo que venga de estos parametros. Esto regresa un observador,
+      es algo como una promesa, algo q esta pendiente de esos cambios. Para que esto funciones nosotros
+      necesitamos suscribirnos a ese observador
+      */
+      this.rutaActiva.params.subscribe(parametro => {
+        	console.log(parametro); //esto va a regresar un objeto con todos los parametros en este caso id:0
+        							//tener presente que los parametros q regresan son los q declaramos en el router y
+        							// con los mismos nombres que usamos en el router
+        	//puedo verlo así console.log(parametro.id); pero la forma adecuada es:
+        	console.log(parametro['id']); //es mas seguro
+      })
+  }
+////////////////////////
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////ActivatedRoute///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+https://angular.io/api/router/ActivatedRoute 
+https://yakovfain.com/2017/03/26/angular-4-changes-in-the-router/
+
+
+ActivatedRoute: Es un servicio que se proporciona a cada ruta que contine informacion especifica de la ruta:
+    - parámetros de ruta(route parameters), 
+    - datos estáticos("data"), 
+    - datos de resolución(resolve data), 
+    - parámetros de consulta globales(global query params) 
+    - fragmento global(global fragment).
+
+
+    nota: Después del final de cada ciclo de vida de navegación exitoso, el enrutador crea un árbol de objetos ActivatedRoute que forman el estado actual del router. Puede acceder al actual  RouterState desde cualquier lugar de la aplicación utilizando el servicio Router y la propiedad routerState.
+	Cada  ActivatedRoute en el provides RouterState proporciona métodos para desplazarse hacia arriba y hacia abajo del árbol de rutas para obtener información de las rutas de padres, hijos y hermanos(parent, child and sibling).
+
+
+	Puesto que los eventos se proporcionan como un "Observable" puede ser: 
+	- filter(): para eventos de interés 
+	- subscribe(): para que tomen decisiones basadas en la secuencia de eventos en el proceso de navegación.
+
+
+https://angular.io/api/router/ActivatedRoute 
+
+
+
+  /*
+      necesitamos escuchar los cambios o lo que venga de estos parametros. Esto regresa un observador,
+      es algo como una promesa, algo q esta pendiente de esos cambios. Para que esto funciones nosotros
+      necesitamos suscribirnos a ese observador
+      */
+
+
+/*
+para referirme a cada uno,
+   get routeConfig(): Route|null
+   get root(): ActivatedRoute
+   get parent(): ActivatedRoute|null
+   get firstChild(): ActivatedRoute|null
+   get children(): ActivatedRoute[]
+   get pathFromRoot(): ActivatedRoute[]
+   get paramMap(): Observable<ParamMap>
+   get queryParamMap(): Observable<ParamMap>
+   toString(): string
+*/
+    //para referirse a padre, hermanos, hijos, etc
+    this.rutaActiva.parent.params.subscribe( parametroPadre => {
+        console.log('parent', parametroPadre);
+    });
+
+    /*
+     snapshot: ActivatedRouteSnapshot //La instantánea actual de esta ruta
+                   // https://yakovfain.com/2017/03/26/angular-4-changes-in-the-router/
+     //observables
+     url: Observable<UrlSegment[]> //* Un observable de los segmentos de URL que coincide con esta ruta. Devuelve un array
+     params: Observable<Params> //*   Un observable de los parametros que fueron definidos para esta ruta. Devuelve un array
+     queryParams: Observable<Params> //* Observable de los parámetros de consulta compartidos por todas las rutas
+     fragment: Observable<string> //* Un observable del "fragmento de URL" compartido por todas las rutas
+     data: Observable<Data>  //* Un observable de las "data estatica" y  "data dinamica resolved" de esta ruta
+     //constantes
+     outlet: string   // El name de outlet de la ruta. Es una constante
+     component: Type<any>|string|null  //El componente de la ruta. Es una constante
+     */
+
+     //constantes
+     console.log('outlet',this.rutaActiva.outlet);
+     console.log('component',this.rutaActiva.component);
+
+     //observables
+    this.rutaActiva.data.subscribe(misdatos => {
+      console.log('data',misdatos);
+    });
+
+    this.rutaActiva.queryParams.subscribe(consulta => {
+      console.log('queryParams',consulta);
+    });
+
+    this.rutaActiva.fragment.subscribe(fragmento => {
+      console.log('fragment',fragmento);
+    });
+
+    this.rutaActiva.url.subscribe(path => {
+      console.log('url',path);
+    });
+
+      this.rutaActiva.params.subscribe(parametro => {
+        console.log(parametro); //esto va a regresar un objeto con todos los parametros en este caso id:0
+        //tener presente que los parametros q regresan son los q declaramos en el router y con los mismos nombres que usamos en el router
+        //puedo verlo así console.log(parametro.id); pero la forma adecuada es:
+        console.log(parametro['id']); //es mas seguro
+        this.heroe = this._heroeServicio.getheroe(parametro['id']);
+      });
+  }
+
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////SERVICIO///////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+49- Servicios
+
+		vamos a trabajar desde un servicio, porq cdo trabajemos a traves de api, todo deberia ser gestionado a traves de un servicio, porq es lo más práctico
+
+
+		crearemos un servicio "heroe", q será encargado de mostrar o manejar la información referente a los heroes de nuestra APP
+		Caracteristica de los servicios:
+		 - Brindar información a quien lo necesite
+		 - Realizar peticiones CRUD (crear, leer, actualizar, eliminar)
+		 - Mantener la data de forma persistente ( datos listo siempre, para q los clientes entren y obtengan la informacion. Por ejemplo para hacer peticiones por http)
+		 - Servir como recurso re-utilizable para nuestra APP(varios puedan acceder a la misma data)
+
+50- Creando nuestro 1er servicio.
+  src/app/servicios
+    src/app/servicios/heroes.service.ts
+
+     con snniper saco la sintaxis basicas de servicios
+ 	  "ng2servi" y enter
+
+ 	  //Injectable es un decorador de nuestra clase que lo importamos desde el core de angular
+
+ 	  1- Creo o Defino el servicio "heroes.service.ts"
+ 	     import { Injectable } from '@angular/core';
+
+			//Injectable es un decorador de nuestra clase que lo importamos desde el core de angular
+			@Injectable()
+			export class HeroesService {
+
+			  constructor() {
+			    console.log('servicios listo para usar!!!');
+			  }
+			}
+
+		2- Le digo a angular q disponga de ese servicio "app.module.ts"
+		 //servicios
+			import { HeroesService } from './servicios/heroes.service';	
+
+			  providers: [ //providers=services
+			    HeroesService
+  			  ],
+
+  		3- Usar el servicio en un componente
+  		   -voy al componente en este caso "heroes.components.ts"	  
+  		     - importo el servicio
+	  		     import { HeroesService } from '../../servicios/heroes.service';	
+
+	  		 - lo paso como parametro al constructor
+	  		    constructor(private _miservicio:HeroesService) { 
+
+  				}    
+
+  		nota: cuando termino aqui inmediatamente dispara el constructor de servicio y por ende tiene todos los datos del servicio
+  		
+
+
+
+
+
+
+
+
+
+
+
+
+
+

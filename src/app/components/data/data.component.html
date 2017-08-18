@@ -1,3 +1,126 @@
-<p>
-  data works!
-</p>
+<h4>Formularios <small>Data</small></h4>
+<hr>
+<form [formGroup]="forma" (ngSubmit)="guardarCambios()" >
+  <div formGroupName="nombrecompleto"> 
+
+  		<!-- <div class="form-group row" [ngClass]="{'has-danger': (forma.get('nombre').errors?.required || forma.get('nombre').errors?.minlength) && forma.get('nombre').touched }" >
+		<div class="form-group row" [ngClass]="{'has-danger': (!forma.get('nombre').valid) }" >
+
+<div class="form-group row"  >
+
+		<div class="form-group row" [ngClass]="{'has-danger': !forma.get('nombrecompleto.nombre').valid }" >
+		<div class="form-group row" [ngClass]="{'has-danger': !forma.controls['nombrecompleto'].controls['nombre'].valid }" >
+
+		
+  		-->
+
+      
+			<div class="form-group row" [ngClass]="{'has-danger': !forma.get('nombrecompleto.nombre').valid }" >
+        <label class="col-2 col-form-label">Nombre</label>
+        <div class="col-8">
+
+          <input class="form-control"
+                 type="text"
+                 placeholder="Nombre"
+                 formControlName="nombre"
+                 >
+
+              
+             <div *ngIf="forma.get('nombrecompleto.nombre').errors?.required" 
+             	    class="form-control-feedback">
+             	 Este campo es requerido
+             </div>    
+
+             
+             <div *ngIf="forma.get('nombrecompleto.nombre').errors?.minlength" 
+             		class="form-control-feedback">
+             	 Por lo menos {{forma.get('nombrecompleto.nombre').errors.minlength.requiredLength}} caracteres
+             </div>    
+             
+             
+
+        </div>
+      </div>
+
+      <div class="form-group row" [ngClass]="{'has-danger': !forma.get('nombrecompleto.apellido').valid }" >
+        <label class="col-2 col-form-label">Apellido</label>
+        <div class="col-8">
+
+          <input class="form-control"
+                 type="text"
+                 placeholder="Apellido"
+                 formControlName="apellido"
+                 >
+             
+             <div *ngIf="forma.get('nombrecompleto.apellido').errors?.required" 
+                  class="form-control-feedback">
+               Este campo es requerido
+             </div>    
+
+             
+             <div *ngIf="forma.get('nombrecompleto.apellido').errors?.minlength" 
+                class="form-control-feedback">
+               Por lo menos {{forma.get('nombrecompleto.apellido').errors.minlength.requiredLength}} caracteres
+             </div>  
+
+
+             <div *ngIf="forma.get('nombrecompleto.apellido').errors?.noherrera" 
+                class="form-control-feedback">
+                 Su apellido no puede ser herrera
+             </div>  
+
+             
+
+        </div>
+      </div>
+  </div>
+
+  <div class="form-group row">
+      <label class="col-2 col-form-label">Correo</label>
+      <div class="col-md-8">
+
+        <input class="form-control"
+               type="email"
+               placeholder="Correo electrónico"
+               formControlName="correo"
+               >
+      </div>
+  </div>
+
+
+ <div class="form-group row">
+      <label class="col-2 col-form-label">Pasatiempos</label>
+      <div class="col-md-8" formArrayName="pasatiempos" >
+
+        <input *ngFor="let pasat of forma.controls['pasatiempos'].controls; let i=index"
+               formControlName="{{i}}"
+               class="form-control"
+               type="text"
+               placeholder="Pasatiempos"
+               >
+
+      </div>
+
+      <button 
+          (click) = "agregarPasatiempo()"
+          type="button" class="btn btn-primary">
+          Nuevo 
+      </button>
+
+  </div>
+
+
+
+  <div class="form-group row">
+      <label class="col-2 col-form-label">&nbsp;</label>
+      <div class="input-group col-md-8">
+        <button  
+                type="submit" class="btn btn-outline-primary">
+          Guardar
+        </button>
+      </div>
+  </div>
+
+ {{forma.valid}}
+
+</form>
